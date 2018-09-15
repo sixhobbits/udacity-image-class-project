@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/print_results.py
-#                                                                             
-# PROGRAMMER: 
-# DATE CREATED:
-# REVISED DATE: 
+#
+# PROGRAMMER: Gareth Dwyer
+# DATE CREATED: 14 September 2018
+# REVISED DATE:
 # PURPOSE: Create a function print_results that prints the results statistics
 #          from the results statistics dictionary (results_stats_dic). It 
 #          should also allow the user to be able to print out cases of misclassified
 #          dogs and cases of misclassified breeds of dog using the Results 
-#          dictionary (results_dic).  
+#          dictionary (results_dic).
 #         This function inputs:
 #            -The results dictionary as results_dic within print_results 
 #             function and results for the function call within main.
@@ -25,14 +25,9 @@
 #             False in the function call within main (defaults to False)
 #         This function does not output anything other than printing a summary
 #         of the final results.
-##
-# TODO 6: Define print_results function below, specifically replace the None
-#       below by the function definition of the print_results function. 
-#       Notice that this function doesn't to return anything because it  
-#       prints a summary of the results using results_dic and results_stats_dic
-# 
-def print_results(results_dic, results_stats_dic, model, 
-                  print_incorrect_dogs = False, print_incorrect_breed = False):
+#
+def print_results(results_dic, results_stats_dic, model,
+                  print_incorrect_dogs=False, print_incorrect_breed=False):
     """
     Prints summary results on the classification and then prints incorrectly 
     classified dogs and incorrectly classified dog breeds if user indicates 
@@ -61,6 +56,29 @@ def print_results(results_dic, results_stats_dic, model,
                               False doesn't print anything(default) (bool) 
     Returns:
            None - simply printing results.
-    """    
-    None
-                
+    """
+
+    print("Results for architecture: {}".format(model))
+    print("-------------------------------")
+    print('Number of Images: {}'.format(results_stats_dic['n_images']))
+    print('Number of Dog Images: {}'.format(results_stats_dic['n_dogs_img']))
+    print('Number of "Not-a" Dog Image: {}'.format(results_stats_dic['n_notdogs_img']))
+
+    for key in results_stats_dic:
+        if key.startswith("pct_"):
+            print("{}: {}".format(key, results_stats_dic[key]))
+
+    if print_incorrect_dogs:  # user wants to see extra info
+        if results_stats_dic['n_correct_dogs'] + results_stats_dic['n_correct_notdogs'] != results_stats_dic['n_images']:
+            for key in results_dic:
+                if results_dic[key][3] != results_dic[key][4]:
+                    print("Image {} classified incorrectly as {}".format(key, results_dic[key][1]))
+
+    if print_incorrect_breed:
+        if results_stats_dic['n_correct_dogs'] != results_stats_dic['n_correct_breed']:
+            for key in results_dic:
+                if results_dic[key][3] == 1 and results_dic[key][4] == 1 and results_dic[key][2] == 0:
+                    print("Image {} classified incorrectly as {}".format(key, results_dic[key][1]))
+
+    return None
+

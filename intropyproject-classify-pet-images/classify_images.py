@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/classify_images.py
-#                                                                             
-# PROGRAMMER: 
-# DATE CREATED:                                 
-# REVISED DATE: 
+#
+# PROGRAMMER: Gareth Dwyer
+# DATE CREATED: 14 September 2018
+# REVISED DATE:
 # PURPOSE: Create a function classify_images that uses the classifier function 
 #          to create the classifier labels and then compares the classifier 
 #          labels to the pet image labels. This function inputs:
@@ -20,15 +20,11 @@
 #           of the pet and classifier labels as the item at index 2 of the list.
 #
 ##
-# Imports classifier function for using CNN to classify images 
-from classifier import classifier 
+# Imports classifier function for using CNN to classify images
 
-# TODO 3: Define classify_images function below, specifically replace the None
-#       below by the function definition of the classify_images function. 
-#       Notice that this function doesn't return anything because the 
-#       results_dic dictionary that is passed into the function is a mutable 
-#       data type so no return is needed.
-# 
+from classifier import classifier
+
+
 def classify_images(images_dir, results_dic, model):
     """
     Creates classifier labels with classifier function, compares pet labels to 
@@ -63,6 +59,12 @@ def classify_images(images_dir, results_dic, model):
               classifier function to classify the pet images,
               values must be either: resnet alexnet vgg (string)
      Returns:
-           None - results_dic is mutable data type so no return needed.         
+           None - results_dic is mutable data type so no return needed.
     """
-    None 
+    for image_file in results_dic:
+        predicted_result = classifier(images_dir + image_file, model).lower().strip()
+        actual_result = results_dic[image_file][0]
+        correct = 1 if actual_result in predicted_result else 0
+        results_dic[image_file].append(predicted_result)
+        results_dic[image_file].append(correct)
+    return None
